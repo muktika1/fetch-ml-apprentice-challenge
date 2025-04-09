@@ -19,3 +19,10 @@ Normalization: I applied L2 normalization to each final embedding vector to prep
 Verified that each sentence was converted into a fixed-length 384-dimensional embedding vector.
 
 Printed the first sentence’s embedding and confirmed the full shape of the output as (5, 384).
+
+### Why I Didn't Use sentence-transformers
+
+While the `sentence-transformers` library provides a convenient `.encode()` method for sentence embeddings, I chose to implement the sentence transformer manually using HuggingFace Transformers and PyTorch. This allowed me to:
+- Customize pooling (mean pooling instead of CLS token)
+- Maintain control over the architecture for multi-task expansion in later tasks
+- Demonstrate familiarity with transformer internals, which aligns with Fetch's emphasis on engineering depth and adaptability
