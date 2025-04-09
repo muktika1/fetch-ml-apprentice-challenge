@@ -1,6 +1,6 @@
 # fetch-ml-apprentice-challenge
 
-##Task 1: Sentence Transformer Implementation
+## Task 1: Sentence Transformer Implementation
 🧠 Model Choice
 For sentence embeddings, I selected the all-MiniLM-L6-v2 model from HuggingFace. This model is specifically fine-tuned for generating high-quality semantic sentence embeddings using contrastive learning. I considered other models such as BAAI/bge-small-en-v1.5 and all-mpnet-base-v2, but chose MiniLM due to its excellent trade-off between speed and performance.
 
