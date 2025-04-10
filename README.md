@@ -46,6 +46,7 @@ For Task A of the multi-task learning setup, I expanded the original sentence tr
 These classes were chosen to align with real-world Fetch domains such as receipt parsing, fraud detection, promotions, support inquiries, and general communications.
 
 🧱 Architecture Changes
+
 I created a custom PyTorch model class MultiTaskSentenceModel, which:
 
 Loads a MiniLM transformer backbone (all-MiniLM-L6-v2)
@@ -58,20 +59,15 @@ The model outputs raw logits for 5 sentence types.
 
 No training has been applied yet — the classification head is initialized with random weights.
 
-🧪 Testing
-I created a script test_task_a.py that:
-
-Loads 5 example sentences (one for each class)
-
-Runs them through the model
-
-Prints the logits and the predicted class (via argmax)
 
 Task 2B: Multi-Task Learning Expansion – Receipt Quality & Query Intent
+
 🧠 Task Overview
+
 For the second part of the multi-task learning expansion, I implemented two additional output heads on top of the shared sentence transformer backbone:
 
 🔹 Task B1: Receipt Quality Classification
+
 This head classifies a sentence into one of the following categories:
 
 - good_quality
@@ -83,6 +79,7 @@ This head classifies a sentence into one of the following categories:
 This task was inspired by Fetch’s focus on receipt understanding and processing, and simulates how a model might assess whether a receipt image or its description is complete and usable.
 
 🔹 Task B2: Search/Query Intent Classification
+
 This head predicts the intent behind a user query or sentence, with labels such as:
 
 - brand_search
@@ -96,6 +93,7 @@ This head predicts the intent behind a user query or sentence, with labels such 
 This simulates potential ML tasks related to search ranking, ad targeting, and personalization, which align with Fetch’s stated priorities in their machine learning roadmap.
 
 🏗️ Architecture
+
 Both tasks share the same transformer encoder (MiniLM) and pooled sentence embeddings. On top of this, I added:
 
 A 3-class classification head for receipt quality
@@ -105,6 +103,7 @@ A 4-class classification head for query intent
 This structure supports efficient multi-task learning, leveraging shared semantics while supporting task-specific objectives.
 
 ## Task 3: Training Considerations
+
 🔹 Scenario 1: Freezing the Entire Network
 Implication: No part of the model — including the transformer backbone and task-specific heads — is updated during training.
 
