@@ -195,6 +195,9 @@ The model is trained using CrossEntropyLoss for each head.
 
 ### 🧠 Design Choices
 
+I chose `CrossEntropyLoss` for all three tasks since they are multi-class classification problems, and the loss function accepts raw logits and integer labels directly. I used the `Adam` optimizer due to its strong performance on transformer-based models, efficient handling of sparse gradients, and suitability for multi-task fine-tuning without extensive hyperparameter tuning.
+
+
 Loss Calculation:
 
 I computed a separate loss for each task-specific head and combined them using a simple sum. In a real-world setup, I might use weighted loss if one task is more important or harder than the others.
@@ -223,19 +226,19 @@ These are passed to individual CrossEntropyLoss functions based on the labels.
 
 Although I didn’t compute metrics in code, I would track:
 
-Accuracy and loss for each task
+- Accuracy and loss for each task
 
-Per-task learning curves to monitor training dynamics
+- Per-task learning curves to monitor training dynamics
 
-Optional: Macro F1 scores for imbalanced datasets
+- Optional: Macro F1 scores for imbalanced datasets
 
 In production, I would also:
 
-Use early stopping per task
+- Use early stopping per task
 
-Log gradients to ensure no head dominates the loss
+- Log gradients to ensure no head dominates the loss
 
-Consider using task-specific learning rates or schedulers
+- Consider using task-specific learning rates or schedulers
 
 ### 🧠 Summary of Key Decisions & Insights (Task 4)
 
