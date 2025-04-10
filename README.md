@@ -2,11 +2,11 @@
 
 ## Task 1: Sentence Transformer Implementation
 
-🧠 Model Choice
+### 🧠 Model Choice
 
 For sentence embeddings, I selected the all-MiniLM-L6-v2 model from HuggingFace. This model is specifically fine-tuned for generating high-quality semantic sentence embeddings using contrastive learning. I considered other models such as BAAI/bge-small-en-v1.5 and all-mpnet-base-v2, but chose MiniLM due to its excellent trade-off between speed and performance.
 
-🛠️ Architecture Choices Framework: 
+### 🛠️ Architecture Choices Framework: 
 
 I used PyTorch with HuggingFace Transformers for flexibility, control, and extensibility — particularly to support later tasks involving multi-task learning and custom model heads.
 
@@ -18,7 +18,7 @@ Sentence Examples: To test embedding quality and thematic relevance, I created 5
 
 Normalization: I applied L2 normalization to each final embedding vector to prepare for cosine similarity comparisons and to align with standard semantic search practices.
 
-🧪 Testing 
+### 🧪 Testing 
 
 Ran 5 Fetch-themed sentences through the model.
 
@@ -35,9 +35,9 @@ While the `sentence-transformers` library provides a convenient `.encode()` meth
 
 ## Task 2: Multi-Task Learning Expansion
 
-Task 2A: Sentence Classification (Multi-Task Learning – Part 1)
+### Task 2A: Sentence Classification (Multi-Task Learning – Part 1)
 
-🧠 Task Overview
+### 🧠 Task Overview
 
 For Task A of the multi-task learning setup, I expanded the original sentence transformer model to include a classification head that predicts the category of a given sentence. The head outputs logits corresponding to five Fetch-aligned sentence classes:
 
@@ -53,7 +53,7 @@ For Task A of the multi-task learning setup, I expanded the original sentence tr
 
 These classes were chosen to align with real-world Fetch domains such as receipt parsing, fraud detection, promotions, support inquiries, and general communications.
 
-🧱 Architecture Changes
+### 🧱 Architecture Changes
 
 I created a custom PyTorch model class MultiTaskSentenceModel, which:
 
@@ -68,9 +68,9 @@ The model outputs raw logits for 5 sentence types.
 No training has been applied yet — the classification head is initialized with random weights.
 
 
-Task 2B: Multi-Task Learning Expansion – Receipt Quality & Query Intent
+### Task 2B: Multi-Task Learning Expansion – Receipt Quality & Query Intent
 
-🧠 Task Overview
+### 🧠 Task Overview
 
 For the second part of the multi-task learning expansion, I implemented two additional output heads on top of the shared sentence transformer backbone:
 
@@ -100,7 +100,7 @@ This head predicts the intent behind a user query or sentence, with labels such 
 
 This simulates potential ML tasks related to search ranking, ad targeting, and personalization, which align with Fetch’s stated priorities in their machine learning roadmap.
 
-🏗️ Architecture
+### 🏗️ Architecture
 
 Both tasks share the same transformer encoder (MiniLM) and pooled sentence embeddings. On top of this, I added:
 
@@ -109,6 +109,11 @@ A 3-class classification head for receipt quality
 A 4-class classification head for query intent
 
 This structure supports efficient multi-task learning, leveraging shared semantics while supporting task-specific objectives.
+
+### 🧩 Multi-Task Architecture Summary
+
+To enable multi-task learning, I designed the `MultiTaskSentenceModel` to include a shared MiniLM transformer backbone followed by multiple task-specific output heads. Each head is implemented as a linear classifier that receives the same pooled sentence embedding and outputs logits for its respective task. The key architectural change was moving from a single-head transformer to a multi-headed architecture that returns a dictionary of outputs for joint optimization during training. This setup allows for simultaneous learning across sentence classification (Task A), receipt quality prediction (Task B1), and query intent classification (Task B2), while maintaining a compact and efficient shared encoder.
+
 
 ## Task 3: Training Considerations
 
@@ -174,13 +179,13 @@ My overall strategy prioritizes reusing strong pretrained representations (MiniL
 ## Task 4: Multi-Task Training Loop Implementation
 To demonstrate how the model would be trained in a multi-task setting, I implemented a mock training loop using hypothetical data for each of the three tasks:
 
-Sentence classification (Task A)
+- Sentence classification (Task A)
 
-Receipt quality classification (Task B1)
+- Receipt quality classification (Task B1)
 
-Query intent classification (Task B2)
+- Query intent classification (Task B2)
 
-🔧 Assumptions
+### 🔧 Assumptions
 
 Each input sentence is associated with labels for all three tasks.
 
@@ -188,7 +193,7 @@ Labels are integer class IDs (e.g., 0 = "receipt", 2 = "offer").
 
 The model is trained using CrossEntropyLoss for each head.
 
-🧠 Design Choices
+### 🧠 Design Choices
 
 Loss Calculation:
 
@@ -202,7 +207,7 @@ Freezing Strategy:
 
 In a low-data scenario, I would freeze the transformer backbone and only train the heads.
 
-🔄 Forward Pass
+### 🔄 Forward Pass
 
 The model returns a dictionary with logits for all three heads:
 
@@ -214,7 +219,7 @@ The model returns a dictionary with logits for all three heads:
 
 These are passed to individual CrossEntropyLoss functions based on the labels.
 
-📊 Metrics
+### 📊 Metrics
 
 Although I didn’t compute metrics in code, I would track:
 
@@ -232,7 +237,7 @@ Log gradients to ensure no head dominates the loss
 
 Consider using task-specific learning rates or schedulers
 
-🧠 Summary of Key Decisions & Insights (Task 4)
+### 🧠 Summary of Key Decisions & Insights (Task 4)
 
 My training setup demonstrates a clean and modular approach to multi-task learning. I designed the model to return structured outputs per task, and used individual loss functions to ensure isolated feedback for each head. By summing losses and updating the shared encoder and heads together, I allow the model to learn both general sentence representations and task-specific objectives.
 
