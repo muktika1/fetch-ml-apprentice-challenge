@@ -27,6 +27,8 @@ While the `sentence-transformers` library provides a convenient `.encode()` meth
 - Maintain control over the architecture for multi-task expansion in later tasks
 - Demonstrate familiarity with transformer internals, which aligns with Fetch's emphasis on engineering depth and adaptability
 
+## Task 2: Multi-Task Learning Expansion
+
 Task 2A: Sentence Classification (Multi-Task Learning – Part 1)
 🧠 Task Overview
 For Task A of the multi-task learning setup, I expanded the original sentence transformer model to include a classification head that predicts the category of a given sentence. The head outputs logits corresponding to five Fetch-aligned sentence classes:
@@ -102,7 +104,7 @@ A 4-class classification head for query intent
 
 This structure supports efficient multi-task learning, leveraging shared semantics while supporting task-specific objectives.
 
-Task 3: Training Considerations
+## Task 3: Training Considerations
 🔹 Scenario 1: Freezing the Entire Network
 Implication: No part of the model — including the transformer backbone and task-specific heads — is updated during training.
 
@@ -159,7 +161,7 @@ This approach minimizes the risk of overfitting on limited data, reduces computa
 
 My overall strategy prioritizes reusing strong pretrained representations (MiniLM) while focusing learning on task-specific heads. Freezing the transformer backbone allows the model to retain language generalization while training the lightweight heads for sentence classification, receipt quality, and query intent. In a low-data scenario, this approach balances efficiency and performance. I also explored when it may be helpful to freeze specific heads to support continual learning or avoid degrading prior task performance. These freezing strategies reflect common practices in real-world ML systems, especially those used in production at scale, such as at Fetch.
 
-Task 4 (Bonus): Multi-Task Training Loop
+## Task 4: Multi-Task Training Loop Implementation
 To demonstrate how the model would be trained in a multi-task setting, I implemented a mock training loop using hypothetical data for each of the three tasks:
 
 Sentence classification (Task A)
