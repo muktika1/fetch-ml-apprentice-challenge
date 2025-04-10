@@ -218,6 +218,12 @@ My training setup demonstrates a clean and modular approach to multi-task learni
 
 This mirrors the type of scalable, maintainable ML workflows expected in a real-world ML engineering role — particularly in a company like Fetch, where multi-headed models may serve different aspects of the platform (receipts, fraud, search, etc.).
 
+## 🐳 Docker (Optional Bonus)
 
+To build and run this project in a Docker container:
+
+```bash
+docker build -t fetch-ml-app .
+docker run fetch-ml-app
 
 
