@@ -1,10 +1,14 @@
 # fetch-ml-apprentice-challenge
 
 ## Task 1: Sentence Transformer Implementation
+
 🧠 Model Choice
+
 For sentence embeddings, I selected the all-MiniLM-L6-v2 model from HuggingFace. This model is specifically fine-tuned for generating high-quality semantic sentence embeddings using contrastive learning. I considered other models such as BAAI/bge-small-en-v1.5 and all-mpnet-base-v2, but chose MiniLM due to its excellent trade-off between speed and performance.
 
-🛠️ Architecture Choices Framework: I used PyTorch with HuggingFace Transformers for flexibility, control, and extensibility — particularly to support later tasks involving multi-task learning and custom model heads.
+🛠️ Architecture Choices Framework: 
+
+I used PyTorch with HuggingFace Transformers for flexibility, control, and extensibility — particularly to support later tasks involving multi-task learning and custom model heads.
 
 Embedding Strategy: I extracted sentence embeddings by applying mean pooling over token embeddings from the last hidden state. This method has been shown to outperform using the [CLS] token alone in many downstream tasks.
 
@@ -14,7 +18,9 @@ Sentence Examples: To test embedding quality and thematic relevance, I created 5
 
 Normalization: I applied L2 normalization to each final embedding vector to prepare for cosine similarity comparisons and to align with standard semantic search practices.
 
-🧪 Testing Ran 5 Fetch-themed sentences through the model.
+🧪 Testing 
+
+Ran 5 Fetch-themed sentences through the model.
 
 Verified that each sentence was converted into a fixed-length 384-dimensional embedding vector.
 
@@ -30,7 +36,9 @@ While the `sentence-transformers` library provides a convenient `.encode()` meth
 ## Task 2: Multi-Task Learning Expansion
 
 Task 2A: Sentence Classification (Multi-Task Learning – Part 1)
+
 🧠 Task Overview
+
 For Task A of the multi-task learning setup, I expanded the original sentence transformer model to include a classification head that predicts the category of a given sentence. The head outputs logits corresponding to five Fetch-aligned sentence classes:
 
 - receipt
@@ -105,6 +113,7 @@ This structure supports efficient multi-task learning, leveraging shared semanti
 ## Task 3: Training Considerations
 
 🔹 Scenario 1: Freezing the Entire Network
+
 Implication: No part of the model — including the transformer backbone and task-specific heads — is updated during training.
 
 This approach is typically used only during inference, where a model is deployed for predictions but not trained further. In this scenario, the model can produce outputs based on its pretrained knowledge, but cannot adapt or learn task-specific representations. This is not suitable for the multi-task setting in this project, since both the classification and auxiliary task heads are randomly initialized and require training.
@@ -112,6 +121,7 @@ This approach is typically used only during inference, where a model is deployed
 Conclusion: Freezing the entire model prevents learning and is not appropriate for this use case.
 
 🔹 Scenario 2: Freezing Only the Transformer Backbone
+
 Implication: The transformer (MiniLM) remains unchanged, but the task-specific heads (for sentence classification, receipt quality, and query intent) are trained.
 
 This is a common and effective transfer learning strategy, especially when the pretrained backbone already provides high-quality sentence embeddings. Freezing the backbone:
@@ -125,6 +135,7 @@ This approach is particularly useful when the goal is to adapt the model to spec
 Conclusion: This is a highly recommended approach for fine-tuning task-specific heads in real-world scenarios, especially when resources or data are limited.
 
 🔹 Scenario 3: Freezing One Task-Specific Head
+
 Implication: One of the heads (e.g., sentence classification) is frozen while others are trainable.
 
 This strategy is helpful in continual learning or multi-stage training pipelines. For example, if the receipt quality classifier has already been trained and deployed, you may wish to keep it frozen while training a new query intent classifier. This allows you to extend the model's capabilities without degrading performance on previously learned tasks.
@@ -170,6 +181,7 @@ Receipt quality classification (Task B1)
 Query intent classification (Task B2)
 
 🔧 Assumptions
+
 Each input sentence is associated with labels for all three tasks.
 
 Labels are integer class IDs (e.g., 0 = "receipt", 2 = "offer").
@@ -177,27 +189,33 @@ Labels are integer class IDs (e.g., 0 = "receipt", 2 = "offer").
 The model is trained using CrossEntropyLoss for each head.
 
 🧠 Design Choices
+
 Loss Calculation:
+
 I computed a separate loss for each task-specific head and combined them using a simple sum. In a real-world setup, I might use weighted loss if one task is more important or harder than the others.
 
 Optimizer:
+
 A single Adam optimizer is used to update all trainable parameters.
 
 Freezing Strategy:
+
 In a low-data scenario, I would freeze the transformer backbone and only train the heads.
 
 🔄 Forward Pass
+
 The model returns a dictionary with logits for all three heads:
 
-sentence_type
+- sentence_type
 
-receipt_quality
+- receipt_quality
 
-query_intent
+- query_intent
 
 These are passed to individual CrossEntropyLoss functions based on the labels.
 
 📊 Metrics
+
 Although I didn’t compute metrics in code, I would track:
 
 Accuracy and loss for each task
@@ -215,6 +233,7 @@ Log gradients to ensure no head dominates the loss
 Consider using task-specific learning rates or schedulers
 
 🧠 Summary of Key Decisions & Insights (Task 4)
+
 My training setup demonstrates a clean and modular approach to multi-task learning. I designed the model to return structured outputs per task, and used individual loss functions to ensure isolated feedback for each head. By summing losses and updating the shared encoder and heads together, I allow the model to learn both general sentence representations and task-specific objectives.
 
 This mirrors the type of scalable, maintainable ML workflows expected in a real-world ML engineering role — particularly in a company like Fetch, where multi-headed models may serve different aspects of the platform (receipts, fraud, search, etc.).
