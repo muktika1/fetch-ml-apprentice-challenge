@@ -13,7 +13,7 @@ Let’s dive in! 🚀
 
 For sentence embeddings, I selected the all-MiniLM-L6-v2 model from HuggingFace. This model is specifically fine-tuned for generating high-quality semantic sentence embeddings using contrastive learning. I considered other models such as BAAI/bge-small-en-v1.5 and all-mpnet-base-v2, but chose MiniLM due to its excellent trade-off between speed and performance.
 
-### 🛠️ Architecture Choices Framework: 
+### 🛠️ Architecture Choices Framework
 
 I used PyTorch with HuggingFace Transformers for flexibility, control, and extensibility — particularly to support later tasks involving multi-task learning and custom model heads.
 
