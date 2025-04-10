@@ -266,7 +266,7 @@ docker run fetch-ml-app
 A `.dockerignore` file is included to ensure the Docker image remains lightweight and excludes unnecessary local files such as `.venv/`, `__pycache__/`, and `.git/`.
 
 
-### Conclusion
+## Conclusion
 
 This project gave me the opportunity to explore transformer-based architectures in a practical, multi-task learning context, something I genuinely enjoy and care about. I approached each task with clarity, adaptability, and a focus on real-world relevance, keeping Fetch’s mission and product in mind throughout.
 
