@@ -12,4 +12,4 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Default command
-CMD ["python", "src/train_loop.py"]
+CMD ["python", "src/training_loop.py"]
