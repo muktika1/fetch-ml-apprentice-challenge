@@ -1,5 +1,12 @@
 # fetch-ml-apprentice-challenge
 
+## Introduction
+
+Hi Fetch team! 👋
+Thank you for the opportunity to work on this challenge. I thoroughly enjoyed diving into sentence transformers, multi-task learning, and aligning the tasks with Fetch’s mission. This repo contains my solution for the ML Apprentice take-home exercise, with each task clearly explained and implemented. Feel free to explore the code, comments, and Docker setup.
+
+Let’s dive in! 🚀
+
 ## Task 1: Sentence Transformer Implementation
 
 ### 🧠 Model Choice
@@ -253,8 +260,14 @@ To build and run this project in a Docker container:
 ```bash
 docker build -t fetch-ml-app .
 docker run fetch-ml-app
-
-📦 Docker Cleanup
+```
+### 📦 Docker Cleanup
 
 A `.dockerignore` file is included to ensure the Docker image remains lightweight and excludes unnecessary local files such as `.venv/`, `__pycache__/`, and `.git/`.
 
+
+### Conclusion
+
+This project gave me the opportunity to explore transformer-based architectures in a practical, multi-task learning context, something I genuinely enjoy and care about. I approached each task with clarity, adaptability, and a focus on real-world relevance, keeping Fetch’s mission and product in mind throughout.
+
+Thank you for the chance to dive into this challenge. I’m genuinely excited about the possibility of contributing to Fetch’s ML initiatives and learning alongside your team. Please don’t hesitate to reach out if you’d like me to walk through any part of the implementation or expand on any decision.
