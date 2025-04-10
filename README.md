@@ -254,4 +254,7 @@ To build and run this project in a Docker container:
 docker build -t fetch-ml-app .
 docker run fetch-ml-app
 
+📦 Docker Cleanup
+
+A `.dockerignore` file is included to ensure the Docker image remains lightweight and excludes unnecessary local files such as `.venv/`, `__pycache__/`, and `.git/`.
 
