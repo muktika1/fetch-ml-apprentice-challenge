@@ -159,6 +159,65 @@ This approach minimizes the risk of overfitting on limited data, reduces computa
 
 My overall strategy prioritizes reusing strong pretrained representations (MiniLM) while focusing learning on task-specific heads. Freezing the transformer backbone allows the model to retain language generalization while training the lightweight heads for sentence classification, receipt quality, and query intent. In a low-data scenario, this approach balances efficiency and performance. I also explored when it may be helpful to freeze specific heads to support continual learning or avoid degrading prior task performance. These freezing strategies reflect common practices in real-world ML systems, especially those used in production at scale, such as at Fetch.
 
+Task 4 (Bonus): Multi-Task Training Loop
+To demonstrate how the model would be trained in a multi-task setting, I implemented a mock training loop using hypothetical data for each of the three tasks:
+
+Sentence classification (Task A)
+
+Receipt quality classification (Task B1)
+
+Query intent classification (Task B2)
+
+🔧 Assumptions
+Each input sentence is associated with labels for all three tasks.
+
+Labels are integer class IDs (e.g., 0 = "receipt", 2 = "offer").
+
+The model is trained using CrossEntropyLoss for each head.
+
+🧠 Design Choices
+Loss Calculation:
+I computed a separate loss for each task-specific head and combined them using a simple sum. In a real-world setup, I might use weighted loss if one task is more important or harder than the others.
+
+Optimizer:
+A single Adam optimizer is used to update all trainable parameters.
+
+Freezing Strategy:
+In a low-data scenario, I would freeze the transformer backbone and only train the heads.
+
+🔄 Forward Pass
+The model returns a dictionary with logits for all three heads:
+
+sentence_type
+
+receipt_quality
+
+query_intent
+
+These are passed to individual CrossEntropyLoss functions based on the labels.
+
+📊 Metrics
+Although I didn’t compute metrics in code, I would track:
+
+Accuracy and loss for each task
+
+Per-task learning curves to monitor training dynamics
+
+Optional: Macro F1 scores for imbalanced datasets
+
+In production, I would also:
+
+Use early stopping per task
+
+Log gradients to ensure no head dominates the loss
+
+Consider using task-specific learning rates or schedulers
+
+🧠 Summary of Key Decisions & Insights (Task 4)
+My training setup demonstrates a clean and modular approach to multi-task learning. I designed the model to return structured outputs per task, and used individual loss functions to ensure isolated feedback for each head. By summing losses and updating the shared encoder and heads together, I allow the model to learn both general sentence representations and task-specific objectives.
+
+This mirrors the type of scalable, maintainable ML workflows expected in a real-world ML engineering role — particularly in a company like Fetch, where multi-headed models may serve different aspects of the platform (receipts, fraud, search, etc.).
+
 
 
 
